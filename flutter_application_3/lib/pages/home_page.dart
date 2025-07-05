@@ -45,11 +45,14 @@ class _HomePageState extends State<HomePage> {
       switch (item) {
         case "c":
           _display ="";
+          break;
         case "=":
           double answer = _calculation(_display);
           _display = answer.toString();
+          break;
         default:
           _display = "$_display$item";
+          break;
       }      
     });
   }
