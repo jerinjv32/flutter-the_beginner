@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,6 +28,31 @@ class _HomePageState extends State<HomePage> {
     '=',
   ];
   final List<String> _operators = ["+", "-", "*", "/"];
+  String _display = "";
+
+  double _calculation(String incExpression) {
+    try{
+      ExpressionParser p = GrammarParser();
+      Expression exp = p.parse(incExpression);
+      double answer = exp.evaluate(EvaluationType.REAL, ContextModel());
+      return answer;
+    } catch (e) {
+      return 0;
+    }
+  }
+  void _printItem(String item) {
+    setState(() {
+      switch (item) {
+        case "c":
+          _display ="";
+        case "=":
+          double answer = _calculation(_display);
+          _display = answer.toString();
+        default:
+          _display = "$_display$item";
+      }      
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "DISPLAY AREA",
+                        _display,
                         textDirection: TextDirection.rtl,
                         style: TextStyle(
                           fontSize: 40,
@@ -76,7 +102,10 @@ class _HomePageState extends State<HomePage> {
                 ),
                 itemCount: _keys.length,
                 itemBuilder: (context, index) {
-                  return Expanded(
+                  return GestureDetector(
+                    onTap: () {
+                      _printItem(_keys[index]);
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
