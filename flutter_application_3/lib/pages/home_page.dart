@@ -8,9 +8,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  final List<String> _symbols = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "-", "="];
-
+  final List<String> _keys = [
+    '1',
+    '2',
+    '3',
+    '+',
+    '4',
+    '5',
+    '6',
+    '-',
+    '7',
+    '8',
+    '9',
+    '/',
+    '0',
+    '*',
+    'c',
+    '=',
+  ];
+  final List<String> _operators = ["+", "-", "*", "/"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +34,7 @@ class _HomePageState extends State<HomePage> {
         title: Text("Calaculator"),
         centerTitle: true,
         elevation: 0,
-      ), 
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -26,13 +42,11 @@ class _HomePageState extends State<HomePage> {
             children: [
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 2,
-                      ),
                       borderRadius: BorderRadius.circular(10),
+                      border: Border.all(),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -42,7 +56,7 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(
                           fontSize: 40,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xff91d2ff)
+                          color: Color(0xff91d2ff),
                         ),
                       ),
                     ),
@@ -51,16 +65,45 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          GridView.count(
-            crossAxisCount: 2,
-            children: List.generate(_symbols.length, (index) {
-              return Center(
-                child: Text(
-                  'Item $index',
-                  style: Theme.of(context).textTheme.headlineSmall,
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 10,
                 ),
-              );
-            }),
+                itemCount: _keys.length,
+                itemBuilder: (context, index) {
+                  return Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: _operators.contains(_keys[index]) ? Colors.deepOrange : Colors.blueAccent[200],
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 8,
+                            spreadRadius: 2,
+                            offset: Offset(-2, 3),
+                          )
+                        ]
+                      ),
+                      child: Center(
+                        child: Text(
+                          _keys[index],
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
         ],
       ),
